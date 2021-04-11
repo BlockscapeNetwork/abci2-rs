@@ -1,0 +1,21 @@
+[package]
+name = "abci2-rs"
+version = "0.1.0"
+authors = ["The Blockscape Team"]
+edition = "2018"
+description = "A super thin ABCI layer for Tendermint 0.34.x"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tendermint-proto = { version = "0.19" }
+protobuf = "=2.10.1"
+failure = "0.1.8"
+log = { version = "0.4" }
+simple_logger = "1.11.0"
+bytes = "1.0"
+prost = "0.7"
+
+[[example]]
+name = "simple"
+path = "./examples/simple.rs"
