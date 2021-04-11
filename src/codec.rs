@@ -36,10 +36,10 @@ pub struct Codec<S, I, O> {
 }
 
 impl<S, I, O> Codec<S, I, O>
-    where
-        S: Read + Write,
-        I: Message + Default,
-        O: Message,
+where
+    S: Read + Write,
+    I: Message + Default,
+    O: Message,
 {
     /// Constructor.
     pub fn new(stream: S, read_buf_size: usize) -> Self {
@@ -56,9 +56,9 @@ impl<S, I, O> Codec<S, I, O>
 
 // Iterating over a codec produces instances of `Result<I>`.
 impl<S, I, O> Iterator for Codec<S, I, O>
-    where
-        S: Read,
-        I: Message + Default,
+where
+    S: Read,
+    I: Message + Default,
 {
     type Item = Result<I>;
 
@@ -88,9 +88,9 @@ impl<S, I, O> Iterator for Codec<S, I, O>
 }
 
 impl<S, I, O> Codec<S, I, O>
-    where
-        S: Write,
-        O: Message,
+where
+    S: Write,
+    O: Message,
 {
     /// Send a message using this codec.
     pub fn send(&mut self, message: O) -> Result<()> {
@@ -102,7 +102,7 @@ impl<S, I, O> Codec<S, I, O>
                     std::io::ErrorKind::WriteZero,
                     "failed to write to underlying stream",
                 )
-                    .into());
+                .into());
             }
             self.write_buf.advance(bytes_written);
         }
@@ -112,9 +112,9 @@ impl<S, I, O> Codec<S, I, O>
 
 /// Encode the given message with a length prefix.
 pub fn encode_length_delimited<M, B>(message: M, mut dst: &mut B) -> Result<()>
-    where
-        M: Message,
-        B: BufMut,
+where
+    M: Message,
+    B: BufMut,
 {
     let mut buf = BytesMut::new();
     message.encode(&mut buf)?;
@@ -126,8 +126,8 @@ pub fn encode_length_delimited<M, B>(message: M, mut dst: &mut B) -> Result<()>
 
 /// Attempt to decode a message of type `M` from the given source buffer.
 pub fn decode_length_delimited<M>(src: &mut BytesMut) -> Result<Option<M>>
-    where
-        M: Message + Default,
+where
+    M: Message + Default,
 {
     let src_len = src.len();
     let mut tmp = src.clone().freeze();

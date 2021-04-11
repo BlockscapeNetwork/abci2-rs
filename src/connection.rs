@@ -4,25 +4,24 @@
 use std::net::TcpStream;
 use tendermint_proto::abci::{Request, Response};
 
-use log::{info, error, debug };
-use crate::codec::{ServerCodec};
-use crate::error::{Result};
+use crate::codec::ServerCodec;
+use crate::error::Result;
+use log::{debug, error, info};
 
 pub const MAX_MESSAGE_LENGTH: usize = 1024 * 1024; // TODO: make configurable?
 
 pub struct Connection {
     stream: ServerCodec<TcpStream>,
-    local_addr: String
+    local_addr: String,
 }
 
 impl Connection {
     pub fn new(stream: TcpStream, addr: String) -> Result<Self> {
-        let codec = ServerCodec::new(stream, 1024*1024);
+        let codec = ServerCodec::new(stream, 1024 * 1024);
 
         Ok(Connection {
             stream: codec,
-            local_addr: addr
-
+            local_addr: addr,
         })
     }
 
@@ -37,9 +36,7 @@ impl Connection {
             Some(result) => match result {
                 Ok(r) => r,
                 Err(e) => {
-                    error!(
-                        "Failed to read incoming request from client: {:?}", e
-                    );
+                    error!("Failed to read incoming request from client: {:?}", e);
                     return Ok(Default::default());
                 }
             },
@@ -75,7 +72,6 @@ impl Connection {
     pub fn stream(&self) -> &ServerCodec<TcpStream> {
         &self.stream
     }
-
 }
 
 impl Drop for Connection {
@@ -85,7 +81,7 @@ impl Drop for Connection {
             // TODO:
             //Err(err) if err.as_fail() == std::io::ErrorKind::NotConnected
             //     => {},
-            Err(_err) => { },
+            Err(_err) => {}
             _ => {}
         };
     }

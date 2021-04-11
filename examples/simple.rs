@@ -1,23 +1,22 @@
 // You can run this example by doing `cargo run --example simple`
 // Hint: Tendermint 0.34.x must running
 
+use abci2_rs::codec::ServerCodec;
 use std::net::TcpListener;
 use std::net::TcpStream;
-use abci2_rs::codec::ServerCodec;
 
-use simple_logger::SimpleLogger;
 use log::{error, info, trace};
-use tendermint_proto::abci::{
-    RequestApplySnapshotChunk, RequestBeginBlock, RequestCheckTx, RequestDeliverTx,
-    RequestEcho, RequestEndBlock, RequestInfo, RequestLoadSnapshotChunk,
-    RequestOfferSnapshot, RequestQuery, RequestSetOption, response, Response,
-    ResponseApplySnapshotChunk, ResponseBeginBlock, ResponseCheckTx, ResponseCommit,
-    ResponseDeliverTx, ResponseEcho, ResponseEndBlock, ResponseFlush, ResponseInfo,
-    ResponseInitChain, ResponseListSnapshots, ResponseLoadSnapshotChunk, ResponseOfferSnapshot,
-    ResponseQuery, ResponseSetOption,
-};
-use tendermint_proto::abci::request::Value;
+use simple_logger::SimpleLogger;
 use std::thread;
+use tendermint_proto::abci::request::Value;
+use tendermint_proto::abci::{
+    response, RequestApplySnapshotChunk, RequestBeginBlock, RequestCheckTx, RequestDeliverTx,
+    RequestEcho, RequestEndBlock, RequestInfo, RequestLoadSnapshotChunk, RequestOfferSnapshot,
+    RequestQuery, RequestSetOption, Response, ResponseApplySnapshotChunk, ResponseBeginBlock,
+    ResponseCheckTx, ResponseCommit, ResponseDeliverTx, ResponseEcho, ResponseEndBlock,
+    ResponseFlush, ResponseInfo, ResponseInitChain, ResponseListSnapshots,
+    ResponseLoadSnapshotChunk, ResponseOfferSnapshot, ResponseQuery, ResponseSetOption,
+};
 
 fn main() {
     SimpleLogger::new().init().unwrap();
@@ -35,7 +34,7 @@ fn main() {
 }
 
 fn handle_connection(stream: TcpStream, addr: String) {
-    let mut codec = ServerCodec::new(stream, 1024*1024);
+    let mut codec = ServerCodec::new(stream, 1024 * 1024);
 
     info!("Listening for incoming requests from {}", addr);
     loop {
@@ -57,19 +56,19 @@ fn handle_connection(stream: TcpStream, addr: String) {
         };
 
         let req_clone = req.clone();
-        
+
         let res = Response {
             value: Some(match req.value.unwrap() {
                 Value::Echo(req) => response::Value::Echo(echo(req)),
                 Value::Flush(_) => response::Value::Flush(flush()),
                 Value::Info(req) => response::Value::Info(info(req)),
                 Value::SetOption(req) => response::Value::SetOption(set_option(req)),
-                Value::InitChain(req) => {
-                    response::Value::InitChain { 0: ResponseInitChain {
+                Value::InitChain(req) => response::Value::InitChain {
+                    0: ResponseInitChain {
                         consensus_params: None,
                         validators: vec![],
-                        app_hash: vec![]
-                    } }
+                        app_hash: vec![],
+                    },
                 },
                 Value::Query(req) => response::Value::Query(query(req)),
                 Value::BeginBlock(req) => response::Value::BeginBlock(begin_block(req)),
@@ -78,17 +77,14 @@ fn handle_connection(stream: TcpStream, addr: String) {
                 Value::EndBlock(req) => response::Value::EndBlock(end_block(req)),
                 Value::Commit(_) => response::Value::Commit(commit()),
                 Value::ListSnapshots(_) => response::Value::ListSnapshots(list_snapshots()),
-                Value::OfferSnapshot(req) => {
-                    response::Value::OfferSnapshot(offer_snapshot(req))
-                }
+                Value::OfferSnapshot(req) => response::Value::OfferSnapshot(offer_snapshot(req)),
                 Value::LoadSnapshotChunk(req) => {
                     response::Value::LoadSnapshotChunk(load_snapshot_chunk(req))
                 }
                 Value::ApplySnapshotChunk(req) => {
                     response::Value::ApplySnapshotChunk(apply_snapshot_chunk(req))
                 }
-
-            })
+            }),
         };
 
         let res_clone = res.clone();
@@ -97,7 +93,6 @@ fn handle_connection(stream: TcpStream, addr: String) {
             error!("Failed sending response to client {}: {:?}", addr, e);
             return;
         }
-
 
         trace!("<< {:?}", req_clone);
         trace!("<< {:?}", res);
@@ -150,7 +145,7 @@ fn handle_connection(stream: TcpStream, addr: String) {
 
     /// Allows the Tendermint node to request that the application set an
     /// option to a particular value.
-    fn set_option( _request: RequestSetOption) -> ResponseSetOption {
+    fn set_option(_request: RequestSetOption) -> ResponseSetOption {
         Default::default()
     }
 
@@ -170,10 +165,7 @@ fn handle_connection(stream: TcpStream, addr: String) {
     }
 
     /// Apply the given snapshot chunk to the application's state.
-    fn apply_snapshot_chunk(
-        _request: RequestApplySnapshotChunk,
-    ) -> ResponseApplySnapshotChunk {
+    fn apply_snapshot_chunk(_request: RequestApplySnapshotChunk) -> ResponseApplySnapshotChunk {
         Default::default()
     }
-
 }

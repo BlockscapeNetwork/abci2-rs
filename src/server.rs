@@ -2,8 +2,8 @@
 
 use crate::connection::Connection;
 use crate::error::Result;
+use log::info;
 use std::net::{SocketAddr, TcpListener, ToSocketAddrs};
-use log::{info};
 
 pub struct Server(TcpListener);
 
