@@ -17,11 +17,7 @@ pub struct Connection {
 
 impl Connection {
     pub fn new(stream: TcpStream, addr: String) -> Result<Self> {
-        Self::buffered(stream, 0, addr)
-    }
-
-    pub fn buffered(stream: TcpStream, capacity: usize, addr: String) -> Result<Self> {
-        let mut codec = ServerCodec::new(stream, 1024*1024);
+        let codec = ServerCodec::new(stream, 1024*1024);
 
         Ok(Connection {
             stream: codec,
@@ -89,7 +85,7 @@ impl Drop for Connection {
             // TODO:
             //Err(err) if err.as_fail() == std::io::ErrorKind::NotConnected
             //     => {},
-            Err(err) => { },
+            Err(_err) => { },
             _ => {}
         };
     }

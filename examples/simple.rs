@@ -9,7 +9,7 @@ use simple_logger::SimpleLogger;
 use log::{error, info, trace};
 use tendermint_proto::abci::{
     RequestApplySnapshotChunk, RequestBeginBlock, RequestCheckTx, RequestDeliverTx,
-    RequestEcho, RequestEndBlock, RequestInfo, RequestInitChain, RequestLoadSnapshotChunk,
+    RequestEcho, RequestEndBlock, RequestInfo, RequestLoadSnapshotChunk,
     RequestOfferSnapshot, RequestQuery, RequestSetOption, response, Response,
     ResponseApplySnapshotChunk, ResponseBeginBlock, ResponseCheckTx, ResponseCommit,
     ResponseDeliverTx, ResponseEcho, ResponseEndBlock, ResponseFlush, ResponseInfo,
