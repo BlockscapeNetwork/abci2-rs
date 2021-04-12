@@ -45,4 +45,3 @@ For a more complete example, see [examples/simple.rs](https://github.com/nomic-i
 This crate does not replace any of the excellent and well written existing ABCI wrappers for Tendermint.
 If you need a full documented and feature rich alternative you may find here [tendermint-abci](https://github.com/informalsystems/tendermint-rs/tree/master/abci) or here [abci-rs](https://github.com/devashishdxt/abci-rs) are perfect solution.
 This version is tailored down for a dedicated use case and all credits goes to [Mappum] (Matt Bell <mappum@gmail.com>).
-

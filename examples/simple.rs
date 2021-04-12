@@ -1,5 +1,5 @@
 // You can run this example by doing `cargo run --example simple`
-// Hint: Tendermint 0.34.x must running
+// Hint: Tendermint 0.34.x must be running
 
 use abci2_rs::codec::ServerCodec;
 use std::net::TcpListener;
