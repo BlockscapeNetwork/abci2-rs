@@ -9,7 +9,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tendermint-proto = { version = "0.19" }
+tendermint-proto = { version = "0.18.1" }
 protobuf = "=2.10.1"
 failure = "0.1.8"
 log = { version = "0.4" }
